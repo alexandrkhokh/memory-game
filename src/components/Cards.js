@@ -5,7 +5,7 @@ class Card {
         this.text = text;
     }
 
-    create = () => createEl({}, `${this.text}`);
+    create = () => createEl({className: 'card'}, `${this.text}`);
 }
 
 export default function createCard(text){
