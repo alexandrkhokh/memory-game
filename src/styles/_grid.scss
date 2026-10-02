@@ -1,6 +1,8 @@
 #game-field {
-  max-width: 768px;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(150px, 1fr));
+  gap: 10px 10px;
+  max-width: 650px;
+  place-items: center;
   margin: auto;
 }

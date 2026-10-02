@@ -21,6 +21,10 @@ class State {
         this._moves += 1;
         document.dispatchEvent(new Event('increaseMoves'))
     }
+
+    flipCard = (index) => {
+
+    }
 }
 
 const state = new State();
