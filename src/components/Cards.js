@@ -8,7 +8,8 @@ class Card {
 
     create = () => createEl({
         className: 'card',
-        'data-id': this.index
+        'data-id': this.index,
+        'data-name': this.name
     }, [
         createEl({
             className: 'card__inner'
