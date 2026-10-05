@@ -1,8 +1,15 @@
 import StorageHelper from "./utilities/StorageHelper.js";
-import createModal from "./components/Modal.js";
+
 import createEl from "./utilities/createEl.js";
+import createCard from "./components/Cards.js";
+import createModal from "./components/Modal.js";
+
+import shuffle from "./utilities/fisher-sort.js";
 
 const FLIP_DELAY = 1000;
+const VICTORY_DELAY = 300;
+const CARD_IMAGES = ['8625514', '8625640', '8625876', '8625987', '8634933', '8636483', '8636575', '8642046'];
+const totalPairs = [...CARD_IMAGES, ...CARD_IMAGES];
 
 class State {
     _moves;
@@ -10,12 +17,15 @@ class State {
     gameCompleted;
 
     constructor() {
+        this.field = createEl({id: 'game-field'})
         this._moves = 0;
         this.cards = new Map();
         this.currentOpenCards = new Set();
         this.matched = new Set();
         this.gameCompleted = false;
         this.isLocked = false;
+
+        this.initNewGame();
     }
     get matches() {
         return this.matched.size / 2;
@@ -97,15 +107,37 @@ class State {
         }
     }
 
-    initNewGame() {
-        this.cards.
+    clickHandler = (event) => {
+        const targetCard = event.target.closest('.card');
+        const index = targetCard.dataset.id;
 
+        this.flipCard(index);
+    }
+
+
+    initNewGame() {
         this._moves = 0;
         this.cards.clear();
         this.currentOpenCards.clear();
         this.matched.clear();
         this.gameCompleted = false;
         this.isLocked = false;
+
+        const cardsWrapper = new DocumentFragment();
+
+        const shuffledCards = shuffle(totalPairs);
+        shuffledCards.map((card, index) => {
+            const c = createCard(card, index);
+            c.addEventListener('click', this.clickHandler)
+            this.cards.set(index, c);
+            cardsWrapper.append(c);
+        });
+        this.field.replaceChildren(cardsWrapper);
+        document.dispatchEvent(new Event('increaseMoves'))
+    }
+
+    getField() {
+        return this.field;
     }
 }
 
