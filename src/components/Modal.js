@@ -42,6 +42,9 @@ export default function createModal(content, confirmButton) {
 
     buttonsContainer.append(cancelButton);
     if (confirmButton) {
+        confirmButton.addEventListener('click', () => {
+            removeModalOverlay(modalOverlay);
+        })
         buttonsContainer.append(confirmButton);
     }
     modalContent.append(content, buttonsContainer);

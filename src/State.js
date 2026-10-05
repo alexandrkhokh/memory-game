@@ -69,9 +69,10 @@ class State {
 
                 // Победа
                 if(this.matched.size === 16) {
-
+                    const newGameButton = createEl({tag: 'button'}, ['Новая игра'])
+                    newGameButton.addEventListener('click', this.initNewGame);
                     setTimeout(() => {
-                        createModal(createEl({}, ['Поздравляем с победой!']))
+                        createModal(createEl({}, ['Поздравляем с победой!']), newGameButton)
                     }, 300);
                     const highScores = StorageHelper.get('high-scores');
 
@@ -114,8 +115,7 @@ class State {
         this.flipCard(index);
     }
 
-
-    initNewGame() {
+    initNewGame = () => {
         this._moves = 0;
         this.cards.clear();
         this.currentOpenCards.clear();
