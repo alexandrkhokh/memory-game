@@ -38,5 +38,9 @@ $transition: cubic-bezier(.35, 0, 0, 1.01);
   }
 }
 .card__front {
-  transform: rotateY(180deg);
+  //transform: rotateY(180deg);
+}
+
+.card__back {
+  opacity: 0.1;
 }
