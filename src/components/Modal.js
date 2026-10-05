@@ -22,14 +22,21 @@ export default function createModal(content, confirmButton) {
         className: 'btn',
     }, ['Закрыть']);
 
-    document.addEventListener('keydown', (event) => {
+    const onKeydown = (event) => {
         if (event.key === 'Escape') {
-            removeModalOverlay(modalOverlay);
+            close();
         }
-    });
+    };
+
+    const close = () => {
+        document.removeEventListener('keydown', onKeydown);
+        removeModalOverlay(modalOverlay);
+    };
+
+    document.addEventListener('keydown', onKeydown);
 
     cancelButton.addEventListener('click', () => {
-        removeModalOverlay(modalOverlay);
+        close();
     });
 
     modalContainer.addEventListener('click', (event) => {
@@ -37,14 +44,12 @@ export default function createModal(content, confirmButton) {
     });
 
     modalOverlay.addEventListener('click', () => {
-        removeModalOverlay(modalOverlay);
+        close();
     });
 
     buttonsContainer.append(cancelButton);
     if (confirmButton) {
-        confirmButton.addEventListener('click', () => {
-            removeModalOverlay(modalOverlay);
-        })
+        confirmButton.addEventListener('click', close)
         buttonsContainer.append(confirmButton);
     }
     modalContent.append(content, buttonsContainer);

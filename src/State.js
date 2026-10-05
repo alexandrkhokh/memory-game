@@ -43,12 +43,8 @@ class State {
     flipCard = (i) => {
         const index = Number(i);
 
-        if(this.isLocked || this.matched.has(index)) {
+        if(this.isLocked || this.matched.has(index) || this.currentOpenCards.has(index)) {
             return;
-        }
-        if(this.currentOpenCards.has(index)){
-            this.currentOpenCards.delete(index);
-            this.increaseMoves();
         }
 
         this.cards.get(Number(index)).classList.toggle('flipped')
@@ -56,6 +52,7 @@ class State {
         this.currentOpenCards.add(Number(index))
 
         if(this.currentOpenCards.size === 2) {
+            this.increaseMoves();
             const [first, second] = this.currentOpenCards.values()
 
             const firstCardEl = this.cards.get(first)
@@ -71,7 +68,7 @@ class State {
                 if(this.matched.size === 16) {
                     const newGameButton = createEl({tag: 'button'}, ['Новая игра'])
                     newGameButton.addEventListener('click', this.initNewGame);
-                    setTimeout(() => {
+                    this.victoryTimer = setTimeout(() => {
                         createModal(
                             createEl({}, [
                                 createEl({tag: 'h2'}, ['Поздравляем с победой!']),
@@ -103,14 +100,13 @@ class State {
 
             } else {
                 this.isLocked = true;
-                setTimeout(() => {
+                this.flipTimer = setTimeout(() => {
                     firstCardEl.classList.toggle('flipped')
                     secondCardEl.classList.toggle('flipped')
                     this.isLocked = false;
                 }, FLIP_DELAY)
             }
             this.currentOpenCards.clear();
-            this.increaseMoves();
         }
     }
 
@@ -122,6 +118,8 @@ class State {
     }
 
     initNewGame = () => {
+        clearTimeout(this.flipTimer);
+        clearTimeout(this.victoryTimer);
         this._moves = 0;
         this.cards.clear();
         this.currentOpenCards.clear();
