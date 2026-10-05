@@ -8,21 +8,25 @@ import shuffle from "./utilities/fisher-sort.js";
 const CARD_IMAGES = ['8625514', '8625640', '8625876', '8625987', '8634933', '8636483', '8636575', '8642046'];
 const totalPairs = [...CARD_IMAGES, ...CARD_IMAGES];
 
-const FLIP_DELAY = 1000;
+
 const VICTORY_DELAY = 300;
 
 const shuffledCards = shuffle(totalPairs);
 
 const clickHandler = (event) => {
-    state.increaseMoves();
-    state.pushCurrent(index);
-    event.target.closest('.card').classList.toggle('flipped')
+    const targetCard = event.target.closest('.card');
+    const index = targetCard.dataset.id;
+
+    state.flipCard(index);
 }
+
+
 
 const field = createEl({id: 'game-field'},
     shuffledCards.map((card, index) => {
         const c = createCard(card, index);
         c.addEventListener('click', clickHandler)
+        state.cards.set(index, c);
         return c;
     })
     );
