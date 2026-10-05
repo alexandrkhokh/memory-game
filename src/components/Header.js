@@ -14,7 +14,7 @@ function updateHeader(){
 
 const newGameBtn = createEl({tag: 'button'}, ['Новая игра']);
 newGameBtn.addEventListener('click', () => {
-    console.log('Start New Game');
+    state.initNewGame();
 });
 
 const highScoresBtn = createEl({tag: 'button'}, ['Таблица лидеров']);
