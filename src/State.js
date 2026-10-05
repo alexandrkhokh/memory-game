@@ -33,9 +33,8 @@ class State {
         }
         if(this.currentOpenCards.has(index)){
             this.currentOpenCards.delete(index);
+            this.increaseMoves();
         }
-
-        this.increaseMoves();
 
         this.cards.get(Number(index)).classList.toggle('flipped')
 
@@ -52,14 +51,19 @@ class State {
             if(isMatch) {
                 this.matched.add(first)
                 this.matched.add(second)
-            } else {
-                this.currentOpenCards.clear();
 
+                if(this.matched.size === 16) {
+                    console.log("Complete");
+                }
+
+            } else {
                 setTimeout(() => {
                     firstCardEl.classList.toggle('flipped')
                     secondCardEl.classList.toggle('flipped')
                 }, FLIP_DELAY)
             }
+            this.currentOpenCards.clear();
+            this.increaseMoves();
         }
     }
 }
