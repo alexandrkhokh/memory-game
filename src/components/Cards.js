@@ -1,4 +1,4 @@
-import createEl from "../createEl.js";
+import createEl from "../utilities/createEl.js";
 
 class Card {
     constructor(name, index) {

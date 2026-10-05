@@ -1,3 +1,7 @@
+import StorageHelper from "./utilities/StorageHelper.js";
+import createModal from "./components/Modal.js";
+import createEl from "./utilities/createEl.js";
+
 const FLIP_DELAY = 1000;
 
 class State {
@@ -11,6 +15,7 @@ class State {
         this.currentOpenCards = new Set();
         this.matched = new Set();
         this.gameCompleted = false;
+        this.isLocked = false;
     }
     get matches() {
         return this.matched.size / 2;
@@ -28,7 +33,7 @@ class State {
     flipCard = (i) => {
         const index = Number(i);
 
-        if(this.matched.has(index)) {
+        if(this.isLocked || this.matched.has(index)) {
             return;
         }
         if(this.currentOpenCards.has(index)){
@@ -52,19 +57,55 @@ class State {
                 this.matched.add(first)
                 this.matched.add(second)
 
+                // Победа
                 if(this.matched.size === 16) {
-                    console.log("Complete");
+
+                    setTimeout(() => {
+                        createModal(createEl({}, ['Поздравляем с победой!']))
+                    }, 300);
+                    const highScores = StorageHelper.get('high-scores');
+
+                    const now = new Date();
+                    const dd = String(now.getDate()).padStart(2, '0');
+                    const mm = String(now.getMonth() + 1).padStart(2, '0');
+                    const yyyy = now.getFullYear();
+
+                    const newScore = {
+                        moves: this._moves,
+                        data: `${dd}.${mm}.${yyyy}`
+                    }
+
+                    if(!highScores) {
+                        StorageHelper.set('high-scores', [newScore] )
+                    } else {
+                        highScores.push(newScore)
+                        StorageHelper.set('high-scores', highScores)
+                    }
+
                 }
 
             } else {
+                this.isLocked = true;
                 setTimeout(() => {
                     firstCardEl.classList.toggle('flipped')
                     secondCardEl.classList.toggle('flipped')
+                    this.isLocked = false;
                 }, FLIP_DELAY)
             }
             this.currentOpenCards.clear();
             this.increaseMoves();
         }
+    }
+
+    initNewGame() {
+        this.cards.
+
+        this._moves = 0;
+        this.cards.clear();
+        this.currentOpenCards.clear();
+        this.matched.clear();
+        this.gameCompleted = false;
+        this.isLocked = false;
     }
 }
 
