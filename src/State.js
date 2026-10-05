@@ -72,8 +72,14 @@ class State {
                     const newGameButton = createEl({tag: 'button'}, ['Новая игра'])
                     newGameButton.addEventListener('click', this.initNewGame);
                     setTimeout(() => {
-                        createModal(createEl({}, ['Поздравляем с победой!']), newGameButton)
-                    }, 300);
+                        createModal(
+                            createEl({}, [
+                                createEl({tag: 'h2'}, ['Поздравляем с победой!']),
+                                createEl({tag: 'p'}, [`Вы завершили игру за ${this._moves} ходов`])
+                            ]),
+                            newGameButton
+                        )
+                    }, VICTORY_DELAY);
                     const highScores = StorageHelper.get('high-scores');
 
                     const now = new Date();
